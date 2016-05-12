@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="https://bootswatch.com/paper/bootstrap.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="style.css" media="screen" title="no title" charset="utf-8">
+  </head>
+  <body>
+    <div class="" ng-controller="MainController">
+      <div class="row" ng-repeat="posting in view.postings | orderBy : posting.votes">
+        <div class="col-xs-6 col-md-3">
+          <a href="#" class="thumbnail"><img ng-src="{{posting.image}}" alt="...">
+          </a>
+        </div>
+        <div class="col-md-9">
+          <div class="row">
+            <h4>{{posting.title}} | <span class="glyphicon glyphicon-arrow-up"  ng-click="UpVote(posting)"></span><span class="glyphicon glyphicon-arrow-down" ng-click="DownVote(posting)"></span>{{posting.votes}}</h4>
+          </div>
+          <div class="row" id="author">
+            <h6>By: {{posting.author}}</h6>
+          </div>
+          <div class="row">
+            <p>{{posting.description}}</p>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <h6>{{posting.date | date:'EEEE, MMMM dd, yyyy'}}</h6>
+            </div>
+            <div class="col-md-3">
+              <h6 ng-click="posting.viewComments = !posting.viewComments" >
+                <span class="glyphicon glyphicon-comment"></span>
+                <ng-pluralize count="posting.comments.length" when="{'0': '{} Comments','1': '{} Comment','other': '{} Comments'}"></ng-pluralize>
+              </h6>
+              <div class="col-md-12 panel panel-default" ng-repeat="comments in posting.comments" ng-show="posting.viewComments">
+                <h6 class="panel-body">"{{comments.text}}" <br> - {{comments.name}}</h6>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h6 ng-click="posting.addComment = !posting.addComment"><span class="glyphicon glyphicon-pencil"></span>Add Comment</h6>
+              <div ng-show="posting.addComment">
+                <form name="commentForm" ng-submit="NewComment()">
+                  <label class="control-label" for="text">Comment:
+                    <br>
+                    <textarea name="text"rows="3" columns="50" placeholder="Write comment..."></textarea>
+                  </label>
+                  <br>
+                  <label class="control-label" for="name">Name:
+                    <br>
+                    <input type="text" name="name" placeholder="Your Name...">
+                  </label>
+                  <br>
+                  <a class="btn btn-primary" type="submit">Submit</a>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end of posting -->
+
+        <!-- <div class="row" ng-repeat="post in redditPosts">
+          {{post.data.title}}
+          </div> -->
+      <div>
+        <h3>New Posting</h3>
+        <form name="postForm" ng-submit="submitForm()" novalidate>
+          <div class="form-group" ng-class="{ 'has-error': postForm.title.$invalid && !postForm.title.$pristine, 'has-success' : postForm.title.$valid}">
+            <label class="control-label" for="title">Title:</label>
+            <input autofocus type="text" name="title" class="form-control" ng-model="newPosting.title" ng-required="true" id="title" ng-minlength="2" ng-maxlength="25">
+            <p ng-show="postForm.title.$error.minlength" class="help-block">title is too short</p>
+            <p ng-show="postForm.title.$error.maxlength" class="help-block">title is too long</p>
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': postForm.author.$invalid && !postForm.author.$pristine, 'has-success' : postForm.author.$valid}">
+            <label class="control-label" for="author">Author:</label>
+            <input autofocus type="text" name="author" class="form-control" ng-model="newPosting.author" ng-required="true" id="author" ng-minlength="2" ng-maxlength="25">
+            <p ng-show="postForm.author.$error.minlength" class="help-block">author name is too short</p>
+            <p ng-show="postForm.author.$error.maxlength" class="help-block">author name is too long</p>
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': postForm.image.$invalid && !postForm.image.$pristine, 'has-success' : postForm.image.$valid}">
+            <label class="control-label" for="image">Image URL:</label>
+            <input autofocus type="text" name="image" class="form-control" ng-model="newPosting.image" ng-required="true" id="image" ng-minlength="10">
+            <p ng-show="postForm.image.$error.minlength" class="help-block">image URL is too short</p>
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': postForm.description.$invalid && !postForm.description.$pristine, 'has-success' : postForm.description.$valid}">
+            <label class="control-label" for="description">Description:</label>
+            <textarea autofocus type="text" name="description" class="form-control" ng-model="newPosting.description" ng-required="true" id="description" ng-minlength="10" ng-maxlength=></textarea>
+            <p ng-show="postForm.description.$error.minlength" class="help-block">description is too short</p>
+            <p ng-show="postForm.description.$error.maxlength" class="help-block">description is too long</p>
+          </div>
+          <button class="btn btn-primary" type="submit" ng-disabled="postForm.$invalid">Submit</button>
+        </form>
+      </div>
+    </div>
+
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+  </body>
+</html>
