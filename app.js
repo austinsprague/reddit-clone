@@ -134,6 +134,18 @@ app.controller('MainController', function($scope, $http){
     $scope.newPosting = {};
     $scope.postForm.$setPristine();
   }
+  $scope.submitForm = function() {
+    // event.preventDefault();
+    $scope.newPosting.date = Date.now();
+    $scope.newPosting.votes = 0;
+    $scope.newPosting.comments = [];
+    $scope.newPosting.viewComments= false;
+    $scope.newPosting.addComment = false;
+    $scope.view.postings.push($scope.newPosting);
+    $scope.view.newPostVisible = false;
+    $scope.newPosting = {};
+    $scope.postForm.$setPristine();
+  }
 });
 
 
